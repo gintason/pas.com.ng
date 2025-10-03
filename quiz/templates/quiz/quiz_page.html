@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Online Quiz - Pas.com.ng{% endblock %}
+
+
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg border-0 rounded-4 p-4" style="max-width: 500px; width: 100%;">
+        <div class="card-body text-center">
+            <h2 class="fw-bold text-primary">Welcome to PAS Quiz</h2>
+            <p class="text-muted">Select a quiz category below to get started</p>
+
+            {% if categories %}
+                <form method="get" action="{% url 'quiz:quiz' pk=product.id  %}">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Select Category</label>
+                        <select name="category" class="form-select" required>
+                            <option value="" disabled selected>Choose a category</option>
+                            {% for category in categories %}
+                                <option value="{{ category.category_name }}">{{ category.category_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 mt-2">Start Quiz</button>
+                </form>
+            {% else %}
+                <p class="text-danger fw-semibold">No categories available.</p>
+            {% endif %}
+            
+            <!-- Back button (only if product exists) -->
+            {% if product %}
+                <a href="{% url 'pasApp:full_interview' pk=product.id %}" class="btn btn-secondary mt-3">
+                    ← Back to Full Interview
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

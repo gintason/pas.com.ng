@@ -1,0 +1,29 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+psycopg = "*"
+django-crispy-forms = "*"
+django-bootstrap-v5 = "*"
+pillow = "*"
+django-widget-tweaks = "*"
+django-request = "*"
+paystack-api = "*"
+django-paystack = "*"
+django-environ = "*"
+python-dotenv = "*"
+crispy-bootstrap5 = "*"
+celery = "*"
+redis = "*"
+rapidfuzz = "*"
+django-import-export = "*"
+openpyxl = "*"
+requests = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"

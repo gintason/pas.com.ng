@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Quiz Results - Pas.com.ng{% endblock %}
+
+{% block content %}
+
+<div class="container-lg mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-warning text-center text-white py-3 rounded-top">
+                    <h3 class="fw-bold mb-0">Your Quiz Result</h3>
+                </div>
+                <div class="card-body text-center">
+                    <h5 class="fw-bold">Score: <span class="text-primary">{{ score }}</span></h5>
+                    <p class="fs-5">Percentage: <span class="fw-bold text-success">{{ percent }}%</span></p>
+                    <p>Time Taken: <span class="fw-bold">{{ time }}</span> seconds</p>
+                    <p>Correct Answers: <span class="fw-bold text-success">{{ correct }}</span></p>
+                    <p>Incorrect Answers: <span class="fw-bold text-danger">{{ wrong }}</span></p>
+                    <p>Total Questions: <span class="fw-bold">{{ total }}</span></p>
+                    <hr>
+                    
+                    <h4 class="mt-3">Quiz Review</h4>
+                    <div class="list-group">
+                        {% for answer in user_answers %}
+                        <div class="list-group-item py-3">
+                            <p class="mb-1"><strong>Question:</strong> {{ answer.question }}</p>
+                            <p><strong>Your Answer:</strong> 
+                                <span class="fw-bold {% if answer.is_correct %}text-success{% else %}text-danger{% endif %}">
+                                    {{ answer.user_answer|default:"No Answer" }}
+                                </span>
+                            </p>
+                            {% if not answer.is_correct %}
+                            <p><strong>Correct Answers:</strong> 
+                                <span class="fw-bold text-primary">{{ answer.correct_answers }}</span>
+                            </p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="card-footer text-center bg-light py-3 rounded-bottom">
+
+                    <div class="container text-center mt-4">
+                        {% if product %}
+                            <a href="{% url 'pasApp:full_interview' pk=product.id %}" class="btn btn-secondary">
+                                ← Back to Full Interview
+                            </a>
+                        {% else %}
+                            <p class="text-danger">Error: No product found.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

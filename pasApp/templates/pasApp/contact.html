@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Contact Us - Pas.com.ng{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
+    }
+    .contact-card {
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+    .contact-card:hover {
+        transform: scale(1.02);
+    }
+    .icon {
+        font-size: 1.5rem;
+        color: #ffc107;
+    }
+    .btn-custom {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        color: white;
+        border: none;
+        transition: all 0.3s ease-in-out;
+    }
+    .btn-custom:hover {
+        background: linear-gradient(45deg, #0056b3, #003580);
+        color: #fff;
+    }
+</style>
+
+
+        {% if messages %}
+            <div class="alert alert-success mt-3">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+
+<section class="mt-5 pt-5 ">
+    <div class="container">
+        <div class="row justify-content-center">
+            <!-- Contact Details Section -->
+            <div class="col-lg-5">
+                <div class="contact-card p-4 text-center">
+                    <h2 class="text-primary fw-bold">Contact Us</h2>
+                    <p class="text-muted">Get in touch with us anytime</p>
+                    <hr class="w-50 mx-auto border-warning opacity-100">
+                    <p><i class="bi bi-geo-alt icon"></i> No. 1 Lucky Igbenedion Drive, GRA, Benin City</p>
+                    <p><i class="bi bi-telephone icon"></i> +234 807 248 3764</p>
+                    <p><i class="bi bi-envelope icon"></i> <a href="mailto:info@pas.com.ng" class="text-decoration-none text-dark fw-bold">info@pas.com.ng</a></p>
+                    <p><i class="bi bi-globe icon"></i> <a href="https://www.pas.com.ng" target="_blank" class="text-decoration-none text-dark fw-bold">www.pas.com.ng</a></p>
+                </div>
+            </div>
+
+            <!-- Contact Form Section -->
+            <div class="col-lg-7">
+                <div class="contact-card p-4">
+                    <h3 class="text-primary fw-bold text-center">Send Us a Message</h3>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary w-100">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

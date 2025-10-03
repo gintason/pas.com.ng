@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-lg m-5 mt-5 pt-5">
+    <div class="row justify-content-center">
+        <div class="col-2"></div>
+        <div class="col-8">
+            <div class="container mt-5">
+                <h4 class="text-primary">Select a Category to Start the Untimed Quiz</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Choose a category:</label>
+                        <select name="category" id="category" class="form-select" required>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Take Quiz</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-2"></div>
+
+    </div>
+</div>
+{% endblock %}

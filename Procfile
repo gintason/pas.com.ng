@@ -1,0 +1,1 @@
+web: gunicorn paswebsite.wsgi:application

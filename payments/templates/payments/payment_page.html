@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Payments - Pas.com.ng{% endblock %}
+
+{% block content %}
+
+<style>
+    .carousel-caption{
+  bottom: 60%;
+  font-size: 28;
+  font-family: Arial, Helvetica, sans-serif;
+  transform: translate(0, 50%);
+    }
+    .carousel-caption h5{
+       font-size:  3rem;
+        font-weight: 700;
+        color: #fff;
+        text-shadow: 2px 2px 20px #000;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    .lead{
+        font-size: 18px;
+        color: #ffcc00;
+        text-shadow: 1px 1px 30px #000;
+    }
+
+    /* Accordion Styling */
+
+
+        .accordion-item {
+            border: 2px solid #ffcc00;
+            position: relative;
+            min-height: 60px;
+            margin-bottom: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            background: transparent;
+            color: inherit;
+            font-weight: inherit;
+            
+           
+        }
+
+        .accordion-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .accordion-button {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px 25px;
+            font-weight: 600;
+            color: #000;
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+          
+          
+           
+        }
+
+        .accordion-button:not(.collapsed) {
+            color: #ffffff;
+            background-color: #4400ff;
+           
+        }
+
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: rgba(0, 0, 0, .125);
+        }
+
+        .accordion-button::after {
+            background-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-button:not(.collapsed)::after {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+        }
+
+        .accordion-body {
+            padding: 25px;
+            background-color: #ffffff;
+        }
+
+
+
+    /* Responsive */
+
+    @media (max-width: 992px){
+
+        .carousel-caption h5{
+            font-size: 22px;
+        }
+
+        p{
+            font-size: 14;
+        }
+
+    }
+
+</style>
+
+<div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'slider1.png' %}" class="d-block w-100" width="100%" height="500px" alt="...">
+      </div>
+      <div class="carousel-caption">
+        <h5>Pass All Interviews with Pass247</h5>
+        <p class="lead">Pas is your trusted online gateway to passing any Interview at the first attempt</p>
+    </div>
+</div>
+
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body text-center p-4">
+                    
+                    <!-- Payment Header -->
+                    <h3 class="fw-bold text-danger mb-3">Payment Required</h3>
+                    <hr class="w-50 mx-auto border-danger opacity-100">
+                    
+                    <!-- Payment Information -->
+                    <p class="fs-5 text-muted">
+                        To get full access to all <strong class="text-dark">{{ products }}</strong> 
+                        questions and answers, select a 
+                        <strong class="text-primary">Plan</strong> to get started.
+                    </p>
+
+                    <!-- Payment Form -->
+                   {% if admin_access %}
+                        <p class="text-blue-600 font-bold">👨‍💻 Admin access enabled — no payment required.</p>
+                    {% elif active_payment %}
+                        <p class="text-green-600">
+                            ✅ You already have an active plan: 
+                            <strong>{{ active_payment.plan.name }}</strong> (expires on {{ active_payment.expiry_date|date:"Y-m-d" }})
+                        </p>
+                        <a href="{% url 'pasApp:levels' %}" class="bg-green-600 text-sucess p-2 rounded">
+                            Continue to Interview Levels
+                        </a>
+                    {% else %}
+                        <form method="POST" action="{% url 'payments:pay' %}">
+                            {% csrf_token %}
+                            <label>Select a Plan:</label>
+                            <select name="plan_id" required>
+                                {% for plan in plans %}
+                                <option value="{{ plan.id }}">
+                                    {{ plan.name }} - ₦{{ plan.price }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Proceed to Pay</button>
+                        </form>
+                    {% endif %}
+
+
+                    <!-- Security & Trust Badge -->
+                    <div class="mt-4">
+                        <small class="text-muted">
+                            <i class="bi bi-lock-fill"></i> Secure Payment Powered by Paystack
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Make sure your Paystack dashboard has the callback URL set to something like:-->
+ <!-- https://yourdomain.com/payments/verify/ -->
+
+
+{% endblock %}
+
+

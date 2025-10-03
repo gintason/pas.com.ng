@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} Personal Coaching - Pas 24/7 {% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero bg-primary text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Transform Your Life with Personal Coaching</h1>
+        <p class="lead mt-3">Achieve personal and professional growth with expert guidance from Pas 24/7.</p>
+        <a href="#coaching" class="btn btn-light btn-lg mt-4">Learn More</a>
+    </div>
+</section>
+
+<!-- About Personal Coaching -->
+<section id="coaching" class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <img src="{% static 'senior1.jpeg' %}" class="img-fluid rounded shadow-sm" alt="Personal Coaching">
+            </div>
+            <div class="col-md-6">
+                <h2 class="fw-bold">Why Choose Our Personal Coaching?</h2>
+                <p class="text-muted">At Pas 24/7, we offer personalized coaching to help you **overcome challenges, set meaningful goals, and unlock your full potential**. Whether you need career guidance, confidence building, or leadership coaching, we’re here to support you every step of the way.</p>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check-circle text-success"></i> One-on-One Coaching Sessions</li>
+                    <li><i class="bi bi-check-circle text-success"></i> Goal Setting & Strategic Planning</li>
+                    <li><i class="bi bi-check-circle text-success"></i> Career & Leadership Development</li>
+                    <li><i class="bi bi-check-circle text-success"></i> Confidence & Communication Mastery</li>
+                    <li><i class="bi bi-check-circle text-success"></i> Personalized Action Plans</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Key Features -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-4">What Makes Pas 24/7 Coaching Stand Out?</h2>
+        <div class="row text-center">
+            <div class="col-md-4">
+                <i class="bi bi-people text-success display-4"></i>
+                <h4 class="mt-3">Certified Coaches</h4>
+                <p class="text-muted">Work with expert coaches who are passionate about your success.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="bi bi-lightbulb text-success display-4"></i>
+                <h4 class="mt-3">Personalized Guidance</h4>
+                <p class="text-muted">Every coaching session is tailored to your unique goals and challenges.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="bi bi-bar-chart-line text-success display-4"></i>
+                <h4 class="mt-3">Proven Results</h4>
+                <p class="text-muted">Hundreds of individuals have achieved life-changing success with our coaching.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-4">What Our Clients Say</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 p-3">
+                    <p class="text-muted">"This coaching program changed my life! I finally achieved the career growth I was looking for."</p>
+                    <h6 class="fw-bold">- Sarah Williams, Business Analyst</h6>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 p-3">
+                    <p class="text-muted">"I gained confidence and clarity. The personal coaching sessions were truly transformative!"</p>
+                    <h6 class="fw-bold">- Michael Johnson, Entrepreneur</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="bg-primary text-white text-center py-5">
+    <div class="container">
+        <h2 class="fw-bold">Ready to Take Control of Your Future?</h2>
+        <p class="lead">Join Pas 24/7 Personal Coaching today and start your journey towards success.</p>
+        <a href="{% url 'pasApp:contact' %}" class="btn btn-light btn-lg">Get Started Now</a>
+    </div>
+</section>
+
+{% endblock %}
+

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-12">
+            <div class="text-center mb-4">
+                <h2 class="text-primary fw-bold">Untimed Quiz: {{ category.name }}</h2>
+            </div>
+
+            <form method="post" id="quizForm" class="shadow p-4 bg-light rounded">
+                {% csrf_token %}
+                
+                {% for question in questions %}
+                <div class="mb-4">
+                    <h5 class="fw-semibold">{{ forloop.counter }}. {{ question.text }}</h5>
+                    
+                    <!-- Answer Input -->
+                    <textarea name="question_{{ question.id }}" class="form-control answer-box" rows="2" placeholder="Type your answer here..."></textarea>
+                    
+                    <!-- See Hint Button -->
+                    <button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="showHint('{{ question.id }}')">
+                        <i class="bi bi-lightbulb"></i> See Hint
+                    </button>
+
+                    <!-- Toast Hint (Now Works!) -->
+                    <div id="hint_{{ question.id }}" class="toast-container position-relative mt-2 d-none">
+                        <div class="toast show hint-toast bg-white shadow rounded border" role="alert">
+                            <div class="toast-header">
+                                <strong class="me-auto">Hint</strong>
+                                <button type="button" class="btn-close" onclick="closeHint('{{ question.id }}')"></button>
+                            </div>
+                            <div class="toast-body">
+                                {{ question.hint }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary px-4 py-2 fw-bold shadow">
+                        Submit Quiz
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to Show/Hide Hints -->
+<script>
+    function showHint(questionId) {
+        let hintElement = document.getElementById("hint_" + questionId);
+        if (hintElement.classList.contains("d-none")) {
+            hintElement.classList.remove("d-none");
+        }
+    }
+
+    function closeHint(questionId) {
+        let hintElement = document.getElementById("hint_" + questionId);
+        hintElement.classList.add("d-none");
+    }
+</script>
+
+
+
+
+
+{% endblock %}

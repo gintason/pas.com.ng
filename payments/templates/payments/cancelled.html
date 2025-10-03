@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg border-0 rounded-4 p-4 text-center" style="max-width: 600px; width: 100%;">
+        <div class="card-body">
+            <div class="mb-4">
+                <i class="bi bi-x-circle-fill text-danger" style="font-size: 4rem;"></i>
+            </div>
+            <h2 class="text-danger fw-bold mb-3">Payment Unsuccessful</h2>
+            <p class="fs-5 text-muted">Unfortunately, your payment could not be processed at this time.</p>
+            <p class="text-muted">This could be due to a declined card, network issue, or an error during processing.</p>
+            <a href="{% url 'payments:pay' %}" class="btn btn-outline-danger mt-4">
+                Try Again
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

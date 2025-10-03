@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content%}
+<center>
+    <div class="container-lg mt-5">
+        <h5>Make Payment of N15,000</h5>
+    </div>
+</center>
+
+{% if messages %}
+{% for message in messages %}
+    {% if messages.tags == 'error' %}
+        <div class="alert alert-warning">
+            <center><h4 style="color: rgb(191, 67, 10);">{{message}}</h4></center>
+        </div>
+    {% else %}
+        <div class="alert alert-success">
+            <center><h4 style="color: dodgerblue;">{{message}}</h4></center>
+        </div>
+    {% endif %}
+{% endfor %}
+{% endif %}
+
+<div class='container mt-5'>
+    <div class="row justify-content-center">
+        <div class="col-3 col-lg">
+
+        </div>
+
+        <div class="col-6 col-lg">
+
+        <div class="card" style="width: 25rem;">
+            <div class="card-body">
+
+                <form method="post" >
+                    {% csrf_token %}
+                    {% for hidden_field in form.hidden_fields %}
+                      {{ hidden_field }}
+                    {% endfor %}
+            
+                    {% if form.non_field_errors %}
+                      <div class="alert alert-danger" role="alert">
+                        {% for error in form.non_field_errors %}
+                          {{ error }}
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+            
+                    {% for field in form.visible_fields %}
+                      <div class="form-group">
+                        {{ field.label_tag }}
+            
+                        {% if form.is_bound %}
+                          {% if field.errors %}
+                            {% render_field field class="form-control is-invalid" %}
+                            {% for error in field.errors %}
+                              <div class="invalid-feedback">
+                                {{ error }}
+                              </div>
+                            {% endfor %}
+                          {% else %}
+                            {% render_field field class="form-control is-valid" %}
+                          {% endif %}
+                        {% else %}
+                          {% render_field field class="form-control" %}
+                        {% endif %}
+            
+                        {% if field.help_text %}
+                          <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                      </div>
+                    {% endfor %}
+                    <p><button type="submit" class="btn btn-primary mt-2">Initialize Payment</button></p>
+                </form>     
+              
+            </div>
+          </div>
+
+        </div>
+        <div class="col-3 col-lg">
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

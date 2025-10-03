@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Take Quiz - Pas.com.ng{% endblock %}
+
+
+{% block content %}
+<div class="container mt-5 pt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <!-- Display selected category -->
+                    {% if category_name %}
+                    <h3 class="text-center text-primary mb-4">Take our {{ category_name }} Quiz</h3>
+                    {% endif %}
+
+                    <!-- Timer -->
+                    <div class="d-flex justify-content-between mb-3">
+                        <span id="displaytimer" class="badge bg-danger fs-6">Time Left: 60:00</span>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="progress mb-4">
+                        <div id="quizProgressBar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                    </div>
+
+                    <!-- Quiz Form -->
+                    <form id="quizForm" method="post" action="">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        {% for q in questions %}
+                        <div class="mb-4">
+                            <p class="fw-bold">{{ q.question }}</p>
+                            <textarea class="form-control quiz-answer" name="answer_{{ q.id }}" rows="3" placeholder="Type your answer here..." required></textarea>
+                        </div>
+                        {% endfor %}
+                        
+                        <input id="timer" type="hidden" name="timer" value="">
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Submit Quiz</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block script %}
+<div id="quizData" data-total-questions="{{ questions|length|default:0 }}"></div>
+
+<script>
+    localStorage.removeItem('quizAnswers');
+    document.addEventListener('DOMContentLoaded', function() {
+        const timerDisplay = document.getElementById('displaytimer');
+        const timerInput = document.getElementById('timer');
+        const quizForm = document.getElementById('quizForm');
+        let timeLeft = 60 * 60; // 1 hour in seconds
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplay.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            timerInput.value = 3600 - timeLeft; // Store elapsed time
+            timeLeft--;
+
+            if (timeLeft === 300) { // 5-minute warning
+                alert("⚠️ You have 5 minutes left! Please finish your answers.");
+            }
+
+            if (timeLeft < 0) {
+                clearInterval(timerInterval);
+                alert("⏳ Time is up! Submitting your quiz automatically.");
+                quizForm.submit(); // Auto-submit quiz
+            }
+        }
+
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        // Auto-save every 30 seconds
+        function autoSave() {
+            localStorage.setItem('quizAnswers', JSON.stringify([...document.querySelectorAll('.quiz-answer')].map(el => ({
+                name: el.name,
+                value: el.value
+            }))));
+        }
+        setInterval(autoSave, 30000); // Auto-save every 30 sec
+
+        // Restore saved answers
+        function restoreAnswers() {
+            const savedAnswers = JSON.parse(localStorage.getItem('quizAnswers'));
+            if (savedAnswers) {
+                savedAnswers.forEach(({ name, value }) => {
+                    const input = document.querySelector(`[name="${name}"]`);
+                    if (input) input.value = value;
+                });
+            }
+        }
+        restoreAnswers(); // Restore on load
+
+        // Progress Bar Logic
+        const quizDataElement = document.getElementById('quizData');
+        const totalQuestions = parseInt(quizDataElement.getAttribute('data-total-questions'), 10) || 0;
+        const progressBar = document.getElementById('quizProgressBar');
+        let answeredQuestions = 0;
+
+        document.querySelectorAll('.quiz-answer').forEach(input => {
+            input.addEventListener('input', () => {
+                const answered = new Set();
+                document.querySelectorAll('.quiz-answer').forEach(input => {
+                    if (input.value.trim() !== "") {
+                        answered.add(input.name);
+                    }
+                });
+
+                answeredQuestions = answered.size;
+                const progress = (answeredQuestions / totalQuestions) * 100;
+                progressBar.style.width = `${progress}%`;
+                progressBar.textContent = `${Math.round(progress)}%`;
+                progressBar.setAttribute('aria-valuenow', Math.round(progress));
+            });
+        });
+    });
+</script>
+{% endblock script %}
+
+
+{% endblock %}
+
