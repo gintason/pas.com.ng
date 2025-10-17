@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import environ
 import dj_database_url
-import pymysql
+
 
 # -------------------------------------------------
 # Initialize environment variables
@@ -14,7 +14,6 @@ env = environ.Env(
 # Load environment variables from .env (for local dev)
 environ.Env.read_env(BASE_DIR := Path(__file__).resolve().parent.parent / ".env")
 
-pymysql.install_as_MySQLdb()
 
 # -------------------------------------------------
 # Basic Project Settings
