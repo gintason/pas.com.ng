@@ -14,6 +14,7 @@ env = environ.Env(
 # Load environment variables from .env (for local dev)
 environ.Env.read_env(BASE_DIR := Path(__file__).resolve().parent.parent / ".env")
 
+
 pymysql.install_as_MySQLdb()
 
 # -------------------------------------------------
@@ -89,7 +90,7 @@ WSGI_APPLICATION = "paswebsite.wsgi.application"
 # -------------------------------------------------
 # Database
 # -------------------------------------------------
-# ✅ SQLite locally, PostgreSQL on Render
+# ✅ SQLite locally, PostgreSQL on Render 
 if DEBUG:
     DATABASES = {
         "default": {
