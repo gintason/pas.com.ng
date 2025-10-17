@@ -24,6 +24,7 @@ openpyxl = "*"
 requests = "*"
 dj-database-url = "*"
 whitenoise = "*"
+pymysql = "*"
 
 [dev-packages]
 
