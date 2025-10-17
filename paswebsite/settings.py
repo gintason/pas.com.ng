@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ["pas.com.ng", "www.pas.com.ng", "localhost"]
 # Installed Apps
 # -------------------------------------------------
 INSTALLED_APPS = [
-    # Cloudinary skipped intentionally (not used)
+
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -48,6 +48,10 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "untimed_quiz",
     "import_export",
+
+    # Cloudinary skipped intentionally (not used)
+    "cloudinary",
+    "cloudinary_storage",
 ]
 
 # -------------------------------------------------
@@ -188,3 +192,12 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
+
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": env("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": env("CLOUDINARY_API_KEY"),
+    "API_SECRET": env("CLOUDINARY_API_SECRET"),
+}
+
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"

@@ -25,6 +25,8 @@ requests = "*"
 dj-database-url = "*"
 whitenoise = "*"
 pymysql = "*"
+cloudinary = "*"
+django-cloudinary-storage = "*"
 
 [dev-packages]
 
