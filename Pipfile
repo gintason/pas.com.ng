@@ -22,6 +22,8 @@ rapidfuzz = "*"
 django-import-export = "*"
 openpyxl = "*"
 requests = "*"
+dj-database-url = "*"
+whitenoise = "*"
 
 [dev-packages]
 

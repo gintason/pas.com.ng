@@ -1,38 +1,41 @@
 import os
 from pathlib import Path
-import environ  # <--- add this
-# at top of settings.py
+import environ
+import dj_database_url
 import pymysql
 
-
+# -------------------------------------------------
 # Initialize environment variables
+# -------------------------------------------------
 env = environ.Env(
     DEBUG=(bool, False)
 )
 
+# Load environment variables from .env (for local dev)
+environ.Env.read_env(BASE_DIR := Path(__file__).resolve().parent.parent / ".env")
+
 pymysql.install_as_MySQLdb()
 
-# Build paths
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-# Take environment variables from .env file
-environ.Env.read_env(BASE_DIR / ".env")
-
-# Security
+# -------------------------------------------------
+# Basic Project Settings
+# -------------------------------------------------
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 DEBUG = env("DEBUG")
 
-# Allowed hosts
-ALLOWED_HOSTS = ["pas.com.ng", "www.pas.com.ng", 'localhost']
+ALLOWED_HOSTS = ["pas.com.ng", "www.pas.com.ng", "localhost"]
 
-# Installed apps
+# -------------------------------------------------
+# Installed Apps
+# -------------------------------------------------
 INSTALLED_APPS = [
+    # Cloudinary skipped intentionally (not used)
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Your apps
     "pasApp",
     "users",
     "crispy_forms",
@@ -46,10 +49,12 @@ INSTALLED_APPS = [
     "import_export",
 ]
 
+# -------------------------------------------------
 # Middleware
+# -------------------------------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # ✅ for static files
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -58,6 +63,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+# -------------------------------------------------
+# URL & WSGI Configuration
+# -------------------------------------------------
 ROOT_URLCONF = "paswebsite.urls"
 
 TEMPLATES = [
@@ -78,8 +86,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "paswebsite.wsgi.application"
 
-
-# ✅ Database: SQLite locally, MySQL on Render
+# -------------------------------------------------
+# Database
+# -------------------------------------------------
+# ✅ SQLite locally, PostgreSQL on Render
 if DEBUG:
     DATABASES = {
         "default": {
@@ -89,18 +99,16 @@ if DEBUG:
     }
 else:
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": env("DB_NAME"),
-            "USER": env("DB_USER"),
-            "PASSWORD": env("DB_PASSWORD"),
-            "HOST": env("DB_HOST"),
-            "PORT": env("DB_PORT", default="3306"),
-        }
+        "default": dj_database_url.config(
+            default=env("DATABASE_URL"),
+            conn_max_age=600,
+            ssl_require=True,
+        )
     }
 
-
-# Password validators
+# -------------------------------------------------
+# Password Validators
+# -------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -108,58 +116,75 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
+# -------------------------------------------------
 # Internationalization
+# -------------------------------------------------
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Africa/Lagos"
 USE_I18N = True
 USE_TZ = True
 
-# Static & Media
-STATIC_URL = "static/"
+# -------------------------------------------------
+# Static & Media Files
+# -------------------------------------------------
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
+# -------------------------------------------------
 # Crispy Forms
+# -------------------------------------------------
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
+# -------------------------------------------------
 # Authentication
+# -------------------------------------------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "login"
 
-# Paystack
+# -------------------------------------------------
+# Paystack Configuration
+# -------------------------------------------------
 PAYSTACK_LIVE_SECRET_KEY = env("PAYSTACK_LIVE_SECRET_KEY")
 PAYSTACK_LIVE_PUBLIC_KEY = env("PAYSTACK_LIVE_PUBLIC_KEY")
 PAYSTACK_INITIALIZE_PAYMENT_URL = env("PAYSTACK_INITIALIZE_PAYMENT_URL")
 PAYSTACK_VERIFY_URL = env("PAYSTACK_VERIFY_URL")
 
-# Email
+# -------------------------------------------------
+# Email Configuration
+# -------------------------------------------------
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "mail.pas.com.ng"     # Outgoing SMTP
-EMAIL_PORT = 465                   # Use SSL
-EMAIL_USE_TLS = False              # ❌ Not TLS
-EMAIL_USE_SSL = True               # ✅ SSL on port 465
+EMAIL_HOST = "mail.pas.com.ng"
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
 EMAIL_HOST_USER = "noreply@pas.com.ng"
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = "noreply@pas.com.ng"
 
+# -------------------------------------------------
 # CSRF Trusted Origins
+# -------------------------------------------------
 CSRF_TRUSTED_ORIGINS = [
     "https://www.pas.com.ng",
     "https://pas.com.ng",
 ]
 
-# Celery
+# -------------------------------------------------
+# Celery (optional)
+# -------------------------------------------------
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 
-# Security (only active in production)
+# -------------------------------------------------
+# Security Settings (Active in Production)
+# -------------------------------------------------
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
