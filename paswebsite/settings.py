@@ -91,21 +91,16 @@ WSGI_APPLICATION = "paswebsite.wsgi.application"
 # Database
 # -------------------------------------------------
 # ✅ SQLite locally, PostgreSQL on Render 
-if DEBUG:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-else:
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=env("DATABASE_URL"),
-            conn_max_age=600,
-            ssl_require=True,
-        )
-    }
+
+
+DATABASES = {
+    "default": dj_database_url.config(
+        default=env("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True,
+    )
+}
+
 
 # -------------------------------------------------
 # Password Validators
