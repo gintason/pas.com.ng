@@ -3,6 +3,10 @@ from pathlib import Path
 import environ
 import dj_database_url
 import pymysql
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 
 # -------------------------------------------------
 # Initialize environment variables
@@ -12,7 +16,10 @@ env = environ.Env(
 )
 
 # Load environment variables from .env (for local dev)
-environ.Env.read_env(BASE_DIR := Path(__file__).resolve().parent.parent / ".env")
+BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env(DEBUG=(bool, False))
+environ.Env.read_env(BASE_DIR / ".env")
+
 
 
 pymysql.install_as_MySQLdb()
@@ -206,10 +213,19 @@ if not DEBUG:
     SECURE_HSTS_PRELOAD = True
 
 
+# Cloudinary configuration
 CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": env("CLOUDINARY_CLOUD_NAME"),
-    "API_KEY": env("CLOUDINARY_API_KEY"),
-    "API_SECRET": env("CLOUDINARY_API_SECRET"),
+    'CLOUD_NAME': 'dy2dsgtuq',
+    'API_KEY': '583776219346867',
+    'API_SECRET': 'C9tah5tz3d-eE7xFKEIFpKxYpqE',
 }
 
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Static files (CSS, JS, images)
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Media (uploaded images)
+MEDIA_URL = '/media/'
+
