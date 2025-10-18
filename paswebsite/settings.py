@@ -128,12 +128,24 @@ USE_TZ = True
 # Static & Media Files
 # -------------------------------------------------
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# Only include STATICFILES_DIRS if /static exists
+local_static = BASE_DIR / "static"
+
+if local_static.exists():
+    STATICFILES_DIRS = [local_static]
+else:
+    STATICFILES_DIRS = []
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# Cloudinary for media
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
 
 # -------------------------------------------------
 # Crispy Forms
