@@ -7,20 +7,15 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
+# -------------------------------------------------
+# Base directory and environment setup
+# -------------------------------------------------
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-# -------------------------------------------------
-# Initialize environment variables
-# -------------------------------------------------
 env = environ.Env(
     DEBUG=(bool, False)
 )
-
-# Load environment variables from .env (for local dev)
-BASE_DIR = Path(__file__).resolve().parent.parent
-env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env(BASE_DIR / ".env")
-
-
 
 pymysql.install_as_MySQLdb()
 
@@ -36,27 +31,29 @@ ALLOWED_HOSTS = ["pas.com.ng", "www.pas.com.ng", "localhost"]
 # Installed Apps
 # -------------------------------------------------
 INSTALLED_APPS = [
-
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
     # Your apps
     "pasApp",
     "users",
-    "crispy_forms",
-    "bootstrap5",
     "Blog",
     "payments",
-    "widget_tweaks",
     "quiz",
-    "crispy_bootstrap5",
     "untimed_quiz",
+
+    # UI/UX helpers
+    "crispy_forms",
+    "crispy_bootstrap5",
+    "bootstrap5",
+    "widget_tweaks",
     "import_export",
 
-    # Cloudinary skipped intentionally (not used)
+    # Cloudinary
     "cloudinary",
     "cloudinary_storage",
 ]
@@ -66,7 +63,7 @@ INSTALLED_APPS = [
 # -------------------------------------------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # ✅ for static files
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # ✅ Must come right after SecurityMiddleware
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -101,9 +98,6 @@ WSGI_APPLICATION = "paswebsite.wsgi.application"
 # -------------------------------------------------
 # Database
 # -------------------------------------------------
-# ✅ SQLite locally, PostgreSQL on Render 
-
-
 DATABASES = {
     "default": dj_database_url.config(
         default=env("DATABASE_URL"),
@@ -111,7 +105,6 @@ DATABASES = {
         ssl_require=True,
     )
 }
-
 
 # -------------------------------------------------
 # Password Validators
@@ -137,9 +130,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Only include STATICFILES_DIRS if /static exists
 local_static = BASE_DIR / "static"
-
 if local_static.exists():
     STATICFILES_DIRS = [local_static]
 else:
@@ -147,18 +138,23 @@ else:
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-# Cloudinary for media
+# Cloudinary for media uploads
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": "dy2dsgtuq",
+    "API_KEY": "583776219346867",
+    "API_SECRET": "C9tah5tz3d-eE7xFKEIFpKxYpqE",
+}
+
 DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-
 # -------------------------------------------------
 # Crispy Forms
 # -------------------------------------------------
-CRISPY_TEMPLATE_PACK = "bootstrap5"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # -------------------------------------------------
 # Authentication
@@ -211,21 +207,3 @@ if not DEBUG:
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
-
-
-# Cloudinary configuration
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dy2dsgtuq',
-    'API_KEY': '583776219346867',
-    'API_SECRET': 'C9tah5tz3d-eE7xFKEIFpKxYpqE',
-}
-
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-# Static files (CSS, JS, images)
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Media (uploaded images)
-MEDIA_URL = '/media/'
-
