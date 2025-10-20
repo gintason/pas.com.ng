@@ -105,7 +105,7 @@ def contact_view(request):
     else:
         form = ContactForm()
 
-    return render(request, 'pasAPP/contact.html', {'form': form})
+    return render(request, 'pasApp/contact.html', {'form': form})
    
 
 def cv_build_up_view(request):
